@@ -1,8 +1,7 @@
 f = file("/Users/xuchenghuiyun/Downloads/train-images-idx3-ubyte", "rb")
-m = (matrix(readBin(f,integer(), size=1, n=28*28, endian="big"),28,28))
-
-ok = rbind(m[17:28,],m[1:16,])
-image(ok)
+#m = (matrix(readBin(f,integer(), size=1, n=28*28, endian="big"),28,28))
+#ok = rbind(m[17:28,],m[1:16,])
+#image(ok)
 
 par(mfrow=c(5,5))
 par(mar=c(0.1,0.1,0.1,0.1))
@@ -11,3 +10,11 @@ for(i in 1:25){
   ok = rbind(m[17:28,],m[1:16,])
   image(ok[,28:1])
   }
+
+label = file("/Users/xuchenghuiyun/Desktop/STA243/data/train-labels-idx1-ubyte", "rb")
+# Read Number of Labels
+n = readBin(label,'integer',n=1,size=4,endian='big')
+# Read All the Labels
+y = readBin(label,'integer',n=n,size=1,signed=F)
+labels = y[-1:-4]
+labels
