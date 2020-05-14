@@ -32,29 +32,31 @@ train_sub$x = train$x[train$y %in% c(0,1,2,3,4),]
 train_sub$y = train$y[train$y %in% c(0,1,2,3,4)]
 train_sub$n = length(train_sub$y)
 
-# par(mfrow=c(5,5))
-# par(mar=c(0.1,0.1,0.1,0.1))
-# for (i in 1:25) {
-#   ok = matrix(train$x[i,], 28, 28)
-#   image(ok[28:1,])
-# }
+par(mfrow=c(5,5))
+par(mar=c(0.1,0.1,0.1,0.1))
+for (i in 1:25) {
+  ok = matrix(train_sub$x[i,], 28, 28)
+  image(ok[28:1,])
+}
+
 
 compress14 = function (image) {
   compress = vector(length = 14*14)
-  for (i in 1:14) {
-    for (j in 1:14) {
-      compress[(i-1)*14+j] = ( image[28*(2*i-2) + (2*j-1)] + image[28*(2*i-2) + (2*j)] 
-                                + image[28*(2*i-1) + (2*j-1)] + image[28*(2*i-1) + (2*j)] )
+  for (i in 0:13) {
+    for (j in 0:13) {
+      x = 28 * 2*i + 2*j + 1
+      y = 28 * (2*i + 1) + 2*j + 1
+      compress[i*14+j+1] = ( image[x] + image[x+1] + image[y] + image[y+1] )/4
     }
   }
   compress
 }
 
-train_sub$x = t(apply(train_sub$x, 1, compress14))
+train_compress = t(apply(train_sub$x, 1, compress14))
 
 par(mfrow=c(5,5))
 par(mar=c(0.1,0.1,0.1,0.1))
 for (i in 1:25) {
-  ok = matrix(train_sub$x[i,], 14, 14)
+  ok = matrix(train_compress[i,], 14, 14)
   image(ok[14:1,])
 }
